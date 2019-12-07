@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>将博客从Windows转移至MacOS</title>
+      <link href="/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/"/>
+      <url>/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/</url>
+      
+        <content type="html"><![CDATA[<p>由于本人刚接触MacOS,系统使用习惯依然是Windows的那一套，还没改过来。安装Git和Node.js时没看Hexo的文档直接从官网下载安装包安装，过程也很顺利，跟Windows一样直接点下一步就安装完成了。结果到安装Hexo时，我在终端输入<br><code>$ npm install -g hexo-cli</code><br>之后就报错</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">npm WARN checkPermissions Missing write access to /usr/local/lib/node_modules </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">npm ERR! code EACCES </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">npm ERR! syscall access </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">npm ERR! path /usr/local/lib/node_modules </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">npm ERR! errno -13 </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">npm ERR! Error: EACCES: permission denied, access '/usr/local/lib/node_modules' </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">npm ERR! [Error: EACCES: permission denied, access '/usr/local/lib/node_modules'] &#123; </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">npm ERR! stack: "Error: EACCES: permission denied, access '/usr/local/lib/node_modules'", </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">npm ERR! errno: -13, </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">npm ERR! code: 'EACCES', </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">npm ERR! syscall: 'access', </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">npm ERR! path: '/usr/local/lib/node_modules' </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">npm ERR! &#125; </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">npm ERR! </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">npm ERR! The operation was rejected by your operating system. </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">npm ERR! It is likely you do not have the permissions to access this file as the current user </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">npm ERR! </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">npm ERR! If you believe this might be a permissions issue, please double-check the </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">npm ERR! permissions of the file and its containing directories, or try running </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">npm ERR! the command again as root/Administrator. </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">npm ERR! A complete log of this run can be found in: </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">npm ERR!  /Users/xxxx/.npm/_logs/2019-11-16T04_23_38_680Z-debug.log</span></pre></td></tr></table></figure><p>查看Hexo的文档才知道是<code>EACCES</code>权限错误的问题，用Homebrew等包管理工具安装就不会出现这种问题，不过文档也提供了解决方法：<a href="https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally" target="_blank" rel="noopener">npmjs发布的指导</a>。指导提供了两种解决方法： </p><ul><li>使用节点版本管理器重新安装npm（推荐）</li><li>手动更改npm的默认目录<br>我选择了第二种，文档翻译如下： </li></ul><p><em>为了最大程度地减少权限错误的可能性，您可以将npm配置为使用其他目录。 在此示例中，您将在主目录中创建并使用隐藏目录。</em></p><ol><li>备份您的电脑</li><li>在命令行的主目录中，为全局安装创建目录： <code>mkdir ~/.npm-global</code> </li><li>配置npm以使用新的目录路径： <code>npm config set prefix &#39;~/.npm-global&#39;</code></li><li>在您喜欢的文本编辑器中，打开或创建<strong><em>~/.profile</em></strong>文件并添加以下行： <code>export PATH=~/.npm-global/bin:$PATH</code></li><li>在命令行上，更新系统变量：<code>source ~/.profile</code></li></ol><p>设置过后便可正常安装Hexo。<br>为了省事儿，我直接将原Windows系统博客目录下的配置文件 <code>_config.yml</code> 和主题文件夹material拷贝过来，由于本博客的外观主题 <code>Material</code> 的官方文档已经无法访问，凭记忆添加插件的时候少安装了一个插件，导致生成文章时再次报错，根据报错找到了忘记安装的 <code>hexo-helper-qrcode</code> 插件，之后便可以正常生成页面，最后添加新的ssh keys到GitHub， <code>hexo generate --deploy</code> 博客顺利完成转移。</p><p>因本博客主题作者已不再维护主题的文档，为了备忘记录一下使用到的配置：<br/>Hexo插件： <code>hexo-deployer-git</code>（一键部署插件），<code>hexo-generator-feed</code>（生成feed插件），<code>hexo-generator-search</code>（本地搜索插件），<code>hexo-helper-qrcode</code>（生成文章页二维码）<br/>MaterialCDN：使用又拍云存储图片和主题的静态文件。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 折腾 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> MacOS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>精神有些低沉</title>
+      <link href="/2018/10/13/%E7%B2%BE%E7%A5%9E%E6%9C%89%E4%BA%9B%E4%BD%8E%E6%B2%89/"/>
+      <url>/2018/10/13/%E7%B2%BE%E7%A5%9E%E6%9C%89%E4%BA%9B%E4%BD%8E%E6%B2%89/</url>
+      
+        <content type="html"><![CDATA[<pre><code>在最深的绝望里，遇见最美丽的风景。    ——几米</code></pre><a id="more"></a><p>年休七天假，因為懶(qióng)癌發作哪也沒去，在家躺尸。方才樓下有一人持桿打棗，擾醒了我的白日夢，無奈我只是這裡的租戶，也不敢對其叫罵。白日夢被擾醒，坐起發了一會兒呆，自言自語道：該想想接下來的路該怎麼走了。<br>個人博客建立以後數次遷移把本就很少的博文都弄丟了，此後停更至今一年多了，微信公眾號也停更快一年了，說工作生活忙不過來無暇顧及肯定是假話，是那份初心被我丟棄了吧。越想輸出越認識到自己的無知和渺小，進而自卑，越對自我期許與看重，心情越黯淡。<br>今年我曾經的一位朋友在兩年未聯絡過我的情況下突然發訊息來說想見見我，一個月后我的這位朋友騙過所有人去了隔海的國度，說是去旅行，最後一天卻在異國跳樓自殺，我愕然，我不知如何面對。十天后我久病的爺爺在老家趁家中無他人時服農藥自殺，我默然。出殯時作為長孫我捧著爺爺的遺像，在大雨中深一腳淺一腳走在泥濘的山路上，我不得不面對我越來越害怕的現實了。<br>我時常想該對自己認真一點了，好不容易來一趟這珍貴的人世，不能枉過這悠長的一生。得過且過的日子我自己都受不了了。自我成長停滯的這兩年我身心都已倦怠，我必須讓自己再次成長，我知道會更加艱辛，我知道成長的路就是失去的路，但成長會有一段這樣艱辛的路要走，這是一條必經的路，它是泥濘的，在經過的時候，一隻脚踩下去，另一隻脚需要從泥濘中用力，用力，才能繼續走下一步……<br>碼了許多廢話，歸根結底：我要奮力前行了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 無題 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 碎碎唸 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
