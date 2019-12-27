@@ -247,7 +247,7 @@
 
     
         <meta property="article:published_time" content="Sun Nov 17 2019 12:07:01 GMT+0800">
-        <meta property="article:modified_time" content="Tue Dec 10 2019 13:42:29 GMT+0800">
+        <meta property="article:modified_time" content="Fri Dec 27 2019 14:34:47 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -270,7 +270,7 @@
     "mainEntityOfPage": "https://onenice.site/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/index.html",
     "headline": "将博客从Windows转移至MacOS",
     "datePublished": "Sun Nov 17 2019 12:07:01 GMT+0800",
-    "dateModified": "Tue Dec 10 2019 13:42:29 GMT+0800",
+    "dateModified": "Fri Dec 27 2019 14:34:47 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "柒語",
@@ -538,7 +538,7 @@ npm ERR!  /Users/xxxx/.npm/_logs/2019-11-16T04_23_38_680Z-debug.log </code></pre
 </ol>
 <p>设置过后便可正常安装Hexo。<br>为了省事儿，我直接将原Windows系统博客目录下的配置文件 <code>_config.yml</code> 和主题文件夹material拷贝过来，由于本博客的外观主题 <code>Material</code> 的官方文档已经无法访问，凭记忆添加插件的时候少安装了一个插件，导致生成文章时再次报错，根据报错找到了忘记安装的 <code>hexo-helper-qrcode</code> 插件，之后便可以正常生成页面，最后添加新的ssh keys到GitHub， <code>hexo generate --deploy</code> 博客顺利完成转移。</p>
 <p>因本博客主题作者已不再维护主题的文档，为了备忘记录一下使用到的配置：<br>Hexo插件： <code>hexo-deployer-git</code>（一键部署插件），<code>hexo-generator-feed</code>（生成feed插件），<code>hexo-generator-search</code>（本地搜索插件），<code>hexo-helper-qrcode</code>（生成文章页二维码）<br>MaterialCDN：使用又拍云存储图片和主题的静态文件。</p>
-<p>补充：Xcode自带Git，应用商店直接安装即可，Node还是用包管理工具Homebrew安装省事儿。</p>
+<p>补充：Xcode自带Git，应用商店直接安装即可，Node还是用包管理工具<a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a>安装省事儿。</p>
 
         
                 <blockquote style="margin: 2em 0 0;padding: 0.5em 1em;border-left: 3px solid #F44336;background-color: #F5F5F5;list-style: none;">
