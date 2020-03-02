@@ -327,66 +327,7 @@
     <!-- Post Excerpt -->
     <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
         
-            服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
-echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
-echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
-sysctl -p
-使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
-bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
-脚本管理命令
-启动 V2ray：systemctl start v2ray
-停止 V2ray：systemctl stop v2ray
-启动 Nginx：systemctl start nginx
-停止 Nginx：systemctl stop nginx
-脚本相关目录
-Web 目录：/home/wwwroot/levis
-V2ray 服务端配置：/etc/v2ray/config.json
-V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
-Nginx 目录：/etc/nginx
-证书目录：/data/v2ray.key 和 /data/v2ray.crt
-路由器配置参考链接：http://iytc.net/wordpress/?p=4243
-{
-  &quot;inbound&quot;: {
-    &quot;protocol&quot;: &quot;dokodemo-door&quot;,
-    &quot;port&quot;: 1234,  
-    &quot;settings&quot;: {
-    &quot;network&quot;: &quot;tcp&quot;,
-    &quot;timeout&quot;: 30,
-    &quot;followRedirect&quot;: true
-    }
-  },
-  &quot;outbound&quot;: {
-    &quot;protocol&quot;: &quot;vmess&quot;,
-    &quot;settings&quot;: {
-    &quot;udp&quot;: true,
-      &quot;vnext&quot;: [{
-        &quot;address&quot;: &quot;fuckgfw.tk&quot;, 
-        &quot;port&quot;: 443,  
-     &quot;users&quot;: [
-        {
-          &quot;id&quot;: &quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&quot;,
-          &quot;alterId&quot;: 64,
-          &quot;security&quot;: &quot;auto&quot;,
-          &quot;level&quot;: 0
-        }
-          ]
-      }]
-    }, 
-   &quot;streamSettings&quot;: {
-      &quot;network&quot;: &quot;ws&quot;,
-      &quot;security&quot;: &quot;tls&quot;,
-      &quot;tlsSettings&quot;: {
-        &quot;serverName&quot;: &quot;fuckgfw.tk&quot;,
-        &quot;allowInsecure&quot;: true
-       },
-      &quot;wsSettings&quot;: {
-        &quot;connectionReuse&quot;: true,
-        &quot;path&quot;: &quot;/19890604/&quot;
-      }
-    }
-}
-}
-下面为一键安装脚本备份
+            服务器端配...
         
         &nbsp;&nbsp;&nbsp;
         <span>

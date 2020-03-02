@@ -62,66 +62,7 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no"/>
-    <meta name="description" itemprop="description" content="服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
-echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-sysctl -p
-使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
-bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
-脚本管理命令
-启动 V2ray：systemctl start v2ray
-停止 V2ray：systemctl stop v2ray
-启动 Nginx：systemctl start nginx
-停止 Nginx：systemctl stop nginx
-脚本相关目录
-Web 目录：/home/wwwroot/levis
-V2ray 服务端配置：/etc/v2ray/config.json
-V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
-Nginx 目录：/etc/nginx
-证书目录：/data/v2ray.key 和 /data/v2ray.crt
-路由器配置参考链接：http://iytc.net/wordpress/?p=4243
-{
-  &amp;quot;inbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
-    &amp;quot;port&amp;quot;: 1234,  
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
-    &amp;quot;timeout&amp;quot;: 30,
-    &amp;quot;followRedirect&amp;quot;: true
-    }
-  },
-  &amp;quot;outbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;udp&amp;quot;: true,
-      &amp;quot;vnext&amp;quot;: [{
-        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
-        &amp;quot;port&amp;quot;: 443,  
-     &amp;quot;users&amp;quot;: [
-        {
-          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
-          &amp;quot;alterId&amp;quot;: 64,
-          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
-          &amp;quot;level&amp;quot;: 0
-        }
-          ]
-      }]
-    }, 
-   &amp;quot;streamSettings&amp;quot;: {
-      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
-      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
-      &amp;quot;tlsSettings&amp;quot;: {
-        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
-        &amp;quot;allowInsecure&amp;quot;: true
-       },
-      &amp;quot;wsSettings&amp;quot;: {
-        &amp;quot;connectionReuse&amp;quot;: true,
-        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
-      }
-    }
-}
-}
-下面为一键安装脚本备份">
+    <meta name="description" itemprop="description" content="OneNiceSite">
     <meta name="keywords" content=",越过长城，走向世界,VPN">
     <meta name="theme-color" content="#778899">
 
@@ -301,71 +242,12 @@ Nginx 目录：/etc/nginx
     <meta property="og:type" content="blog">
     <meta property="og:title" content="V2Ray服务器安装脚本及K2P路由器配置 | OneNiceSite">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
-echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-sysctl -p
-使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
-bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
-脚本管理命令
-启动 V2ray：systemctl start v2ray
-停止 V2ray：systemctl stop v2ray
-启动 Nginx：systemctl start nginx
-停止 Nginx：systemctl stop nginx
-脚本相关目录
-Web 目录：/home/wwwroot/levis
-V2ray 服务端配置：/etc/v2ray/config.json
-V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
-Nginx 目录：/etc/nginx
-证书目录：/data/v2ray.key 和 /data/v2ray.crt
-路由器配置参考链接：http://iytc.net/wordpress/?p=4243
-{
-  &amp;quot;inbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
-    &amp;quot;port&amp;quot;: 1234,  
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
-    &amp;quot;timeout&amp;quot;: 30,
-    &amp;quot;followRedirect&amp;quot;: true
-    }
-  },
-  &amp;quot;outbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;udp&amp;quot;: true,
-      &amp;quot;vnext&amp;quot;: [{
-        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
-        &amp;quot;port&amp;quot;: 443,  
-     &amp;quot;users&amp;quot;: [
-        {
-          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
-          &amp;quot;alterId&amp;quot;: 64,
-          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
-          &amp;quot;level&amp;quot;: 0
-        }
-          ]
-      }]
-    }, 
-   &amp;quot;streamSettings&amp;quot;: {
-      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
-      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
-      &amp;quot;tlsSettings&amp;quot;: {
-        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
-        &amp;quot;allowInsecure&amp;quot;: true
-       },
-      &amp;quot;wsSettings&amp;quot;: {
-        &amp;quot;connectionReuse&amp;quot;: true,
-        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
-      }
-    }
-}
-}
-下面为一键安装脚本备份">
+    <meta property="og:description" content="OneNiceSite">
     <meta property="og:article:tag" content="越过长城，走向世界"> <meta property="og:article:tag" content="VPN"> 
 
     
         <meta property="article:published_time" content="Sun Mar 01 2020 02:27:21 GMT+0800">
-        <meta property="article:modified_time" content="Mon Mar 02 2020 20:13:16 GMT+0800">
+        <meta property="article:modified_time" content="Mon Mar 02 2020 20:21:18 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -388,7 +270,7 @@ Nginx 目录：/etc/nginx
     "mainEntityOfPage": "https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html",
     "headline": "V2Ray服务器安装脚本及K2P路由器配置",
     "datePublished": "Sun Mar 01 2020 02:27:21 GMT+0800",
-    "dateModified": "Mon Mar 02 2020 20:13:16 GMT+0800",
+    "dateModified": "Mon Mar 02 2020 20:21:18 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "柒語",
@@ -407,66 +289,7 @@ Nginx 目录：/etc/nginx
         }
     },
     "keywords": ",越过长城，走向世界,VPN",
-    "description": "服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
-echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
-sysctl -p
-使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
-bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
-脚本管理命令
-启动 V2ray：systemctl start v2ray
-停止 V2ray：systemctl stop v2ray
-启动 Nginx：systemctl start nginx
-停止 Nginx：systemctl stop nginx
-脚本相关目录
-Web 目录：/home/wwwroot/levis
-V2ray 服务端配置：/etc/v2ray/config.json
-V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
-Nginx 目录：/etc/nginx
-证书目录：/data/v2ray.key 和 /data/v2ray.crt
-路由器配置参考链接：http://iytc.net/wordpress/?p=4243
-{
-  &amp;quot;inbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
-    &amp;quot;port&amp;quot;: 1234,  
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
-    &amp;quot;timeout&amp;quot;: 30,
-    &amp;quot;followRedirect&amp;quot;: true
-    }
-  },
-  &amp;quot;outbound&amp;quot;: {
-    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
-    &amp;quot;settings&amp;quot;: {
-    &amp;quot;udp&amp;quot;: true,
-      &amp;quot;vnext&amp;quot;: [{
-        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
-        &amp;quot;port&amp;quot;: 443,  
-     &amp;quot;users&amp;quot;: [
-        {
-          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
-          &amp;quot;alterId&amp;quot;: 64,
-          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
-          &amp;quot;level&amp;quot;: 0
-        }
-          ]
-      }]
-    }, 
-   &amp;quot;streamSettings&amp;quot;: {
-      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
-      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
-      &amp;quot;tlsSettings&amp;quot;: {
-        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
-        &amp;quot;allowInsecure&amp;quot;: true
-       },
-      &amp;quot;wsSettings&amp;quot;: {
-        &amp;quot;connectionReuse&amp;quot;: true,
-        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
-      }
-    }
-}
-}
-下面为一键安装脚本备份",
+    "description": "OneNiceSite",
 }
 </script>
 
@@ -746,8 +569,6 @@ sysctl -p</code></pre>
 }
 }</code></pre>
 <p>下面为一键安装脚本备份</p>
-<a id="more"></a>
-
 <pre><code class="sh">#!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
