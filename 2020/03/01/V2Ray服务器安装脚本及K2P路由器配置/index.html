@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="zh">
+    <head>
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.6 -->
+    <script>
+        window.materialVersion = "1.5.6"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0',
+            '1.5.2',
+            '1.5.5'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+    <link rel="dns-prefetch" href="https://cdn.betamole.com/hexo-theme-material/source"/>
+
+
+
+
+
+    <link rel="dns-prefetch" href="https://onenice-site.disqus.com"/>
+
+
+
+    <link rel="dns-prefetch" href="https://www.google-analytics.com"/>
+
+
+
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com"/>
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            V2Ray服务器安装脚本及K2P路由器配置 | 
+        
+        OneNiceSite
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" itemprop="description" content="服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &amp;quot;inbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
+    &amp;quot;port&amp;quot;: 1234,  
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
+    &amp;quot;timeout&amp;quot;: 30,
+    &amp;quot;followRedirect&amp;quot;: true
+    }
+  },
+  &amp;quot;outbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;udp&amp;quot;: true,
+      &amp;quot;vnext&amp;quot;: [{
+        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
+        &amp;quot;port&amp;quot;: 443,  
+     &amp;quot;users&amp;quot;: [
+        {
+          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
+          &amp;quot;alterId&amp;quot;: 64,
+          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
+          &amp;quot;level&amp;quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &amp;quot;streamSettings&amp;quot;: {
+      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
+      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
+      &amp;quot;tlsSettings&amp;quot;: {
+        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
+        &amp;quot;allowInsecure&amp;quot;: true
+       },
+      &amp;quot;wsSettings&amp;quot;: {
+        &amp;quot;connectionReuse&amp;quot;: true,
+        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份">
+    <meta name="keywords" content=",越过长城，走向世界,VPN">
+    <meta name="theme-color" content="#778899">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","https://cdn.betamole.com/hexo-theme-material/source/css/material.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","https://cdn.betamole.com/hexo-theme-material/source/css/style.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #1E90FF;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #778899 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #778899 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #778899 !important;
+  }
+
+  .toTop {
+    background: #778899 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #778899;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #778899;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #778899;
+  }
+
+  .post-toc a:hover {
+    color: #1E90FF;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-image: url(/img/bg.png);
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","https://cdn.betamole.com/hexo-theme-material/source/css/material-icons.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","https://cdn.staticfile.org/jquery/2.2.0/jquery.js", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="OneNiceSite">
+    <meta name="msapplication-starturl" content="https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">
+    <meta name="msapplication-navbutton-color" content="#778899">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="OneNiceSite">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    <meta name="google-site-verification" content="PhPQgT99qjVn0Jev3QUvXttbiMFqPHWIqus_9NSKlmc" />
+    
+
+    <!-- RSS -->
+    
+        
+            <link rel=alternate type="application/atom+xml" href="/atom.xml">
+        
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="V2Ray服务器安装脚本及K2P路由器配置 | OneNiceSite">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &amp;quot;inbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
+    &amp;quot;port&amp;quot;: 1234,  
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
+    &amp;quot;timeout&amp;quot;: 30,
+    &amp;quot;followRedirect&amp;quot;: true
+    }
+  },
+  &amp;quot;outbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;udp&amp;quot;: true,
+      &amp;quot;vnext&amp;quot;: [{
+        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
+        &amp;quot;port&amp;quot;: 443,  
+     &amp;quot;users&amp;quot;: [
+        {
+          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
+          &amp;quot;alterId&amp;quot;: 64,
+          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
+          &amp;quot;level&amp;quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &amp;quot;streamSettings&amp;quot;: {
+      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
+      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
+      &amp;quot;tlsSettings&amp;quot;: {
+        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
+        &amp;quot;allowInsecure&amp;quot;: true
+       },
+      &amp;quot;wsSettings&amp;quot;: {
+        &amp;quot;connectionReuse&amp;quot;: true,
+        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份">
+    <meta property="og:article:tag" content="越过长城，走向世界"> <meta property="og:article:tag" content="VPN"> 
+
+    
+        <meta property="article:published_time" content="Sun Mar 01 2020 02:27:21 GMT+0800">
+        <meta property="article:modified_time" content="Mon Mar 02 2020 20:13:16 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html" />
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html",
+    "headline": "V2Ray服务器安装脚本及K2P路由器配置",
+    "datePublished": "Sun Mar 01 2020 02:27:21 GMT+0800",
+    "dateModified": "Mon Mar 02 2020 20:13:16 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "柒語",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "少上點網，多點運動"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "OneNiceSite",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",越过长城，走向世界,VPN",
+    "description": "服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &amp;lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &amp;quot;inbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;dokodemo-door&amp;quot;,
+    &amp;quot;port&amp;quot;: 1234,  
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;network&amp;quot;: &amp;quot;tcp&amp;quot;,
+    &amp;quot;timeout&amp;quot;: 30,
+    &amp;quot;followRedirect&amp;quot;: true
+    }
+  },
+  &amp;quot;outbound&amp;quot;: {
+    &amp;quot;protocol&amp;quot;: &amp;quot;vmess&amp;quot;,
+    &amp;quot;settings&amp;quot;: {
+    &amp;quot;udp&amp;quot;: true,
+      &amp;quot;vnext&amp;quot;: [{
+        &amp;quot;address&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;, 
+        &amp;quot;port&amp;quot;: 443,  
+     &amp;quot;users&amp;quot;: [
+        {
+          &amp;quot;id&amp;quot;: &amp;quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&amp;quot;,
+          &amp;quot;alterId&amp;quot;: 64,
+          &amp;quot;security&amp;quot;: &amp;quot;auto&amp;quot;,
+          &amp;quot;level&amp;quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &amp;quot;streamSettings&amp;quot;: {
+      &amp;quot;network&amp;quot;: &amp;quot;ws&amp;quot;,
+      &amp;quot;security&amp;quot;: &amp;quot;tls&amp;quot;,
+      &amp;quot;tlsSettings&amp;quot;: {
+        &amp;quot;serverName&amp;quot;: &amp;quot;fuckgfw.tk&amp;quot;,
+        &amp;quot;allowInsecure&amp;quot;: true
+       },
+      &amp;quot;wsSettings&amp;quot;: {
+        &amp;quot;connectionReuse&amp;quot;: true,
+        &amp;quot;path&amp;quot;: &amp;quot;/19890604/&amp;quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+        <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-91020885-2', 'auto');ga('send', 'pageview');
+</script>
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span id="MD-burger-id" class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#服务器端配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">服务器端配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#路由器配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">路由器配置</span></a></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        <!-- Custom Thumbnail -->
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(https://cdn.betamole.com/img/V2ray.jpg)">
+    
+            <p class="article-headline-p">
+                V2Ray服务器安装脚本及K2P路由器配置
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>柒語</strong>
+        <span>3月 01, 2020</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">在其他設備中閱讀本文章</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVYAAAFWCAAAAAAXxOpfAAAFgElEQVR42u3awW7cMAwE0P3/n06vBYpshkNvY+0+nYLGsaynHggOH1/WC9YDAVasWC2sWLFaWLFitbAexfqI1w8v/euZf39+/tvnf/XdG55/1XfPJOfqTLBixYoVK9ZzWXOyHDTBSvZN3p9cQ3LlGxOsWLFixYr1dNb8s/bFTbJjvkt3SZv/ClixYsWKFesnsyaH764nL6FyxOTa8qYPVqxYsWLFinUTn2xCjrwUm1LersDCihUrVqxY/ztrHqtsDp+HNNNoJ/nbzb+/MMvCihUrVqxYf5V1CvQJP+cmWLFixYoV67ms05WHJV3JkrdjkvJr2vRZyWDFihUrVqwHsuaFRY47Pfym4MsvKdl96oAVK1asWLGezjotkjYHngYzXVSTX+qUfjB+gRUrVqxYsR7I2n10F9XsxzWmhWDeJEouadzBwooVK1asWG/Mmr+oK6Q2h5weL7n+TVz07RdixYoVK1asB7J28clmoGFaDD3fvWuj5BFRPsCBFStWrFixnsiaDCvkh9m0OfZtl64E3DSVsGLFihUr1ndinTYspkXMdMhj+s7kyU2pt+pgYcWKFStWrLdknTZKOpppC6ZrkeTjGvlZBt+PFStWrFixHsiaHC9Z0wvYFEmbkqsLlqL/TFixYsWKFeuxrEmR0YUiSUGTtDa6UdHuypOvxYoVK1asWN+JNY9Y8hJk0wrpBkE2DZq8dBvXrVixYsWKFeuNWadk3ahiztSVZdMCbkx27fgFVqxYsWLFejPW/VhDPpaRl0T5CEU3xpGHQ9F1YsWKFStWrMeyXtVeyQc4VoMOVcsmeU/+DFasWLFixfp+rFfFEgll16bpCq/nKFddOVasWLFixXoiaxfAXAtxVTMlbwPlZd+gKYMVK1asWLEeyDrduCukukvqDj9ttUx3L7MsrFixYsWK9Zas04Jj2jpJiKfXsI9SBg2ULnTBihUrVqxYD2HtQpcOcRNvdKVS3kLq9sWKFStWrFg/gXVDsyl6uoAnH7aY7osVK1asWLF+GusmeskLtc335NeTX1i3L1asWLFixXoi6zTqmAYVSTE0HeC4qgTsQpfx+AVWrFixYsV6Y9ar4oqunOouOLm8PCzpdo/qVqxYsWLFivX2rHnBkTRH9u+cxiqb0GXa7vmBHitWrFixYj2WNW+y7COQTWG0KdSmTZzpQAZWrFixYsV6Imty4KvCj+mwxb4B1NGXURBWrFixYsV6LOu0PZG0RfYXk4c302bKtHEzbrVgxYoVK1asb8SaRxH5gb+qtRnCuKqYw4oVK1asWN+VdRqoTJsaXRCS/DZvGOXo47NgxYoVK1asB7JujtcNOE6vM3lPfoXdwEe0L1asWLFixXogazc8kRc6+ZVM45nNMMe0uRMVbVixYsWKFevhrHm7YdOm6aKazcBH3ljZRERYsWLFihXriaxdOZW3M/Y0ecwz/f598wgrVqxYsWI9nfWqmGRa1nTvzwujay+pDF2wYsWKFSvWo1i7QYoursiHHl7RoMn3zZ/BihUrVqxYT2TdbLwfhujKmu5tebxUXglWrFixYsV6LOs0kOgCjP1l7C9mWlauxi+wYsWKFSvWA1k79H0plrwtCXK6QY1p9PJD6IIVK1asWLEewtoVNNMSZDOyuaHfD26WBRZWrFixYsV6FGsXtOSxxCtKovGxq/BmVWBhxYoVK1asR7HmBUe+Wd7geFQrj166snJwAVixYsWKFSvWuIjpCqNNbNONaAwKRKxYsWLFivXDWLtoZDpUMR3j2FzhLVotWLFixYoV6y+xdiVOHqjkz0z32v/tgG/aasGKFStWrFhvz5rHDF04MUXMn89bJ0kplqNjxYoVK1as78FqXbWwYsWK1cKKFauFFStWC+vt1x/ptxkE+B9bDQAAAABJRU5ErkJggg==">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/VPN/" rel="tag">VPN</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/%E8%B6%8A%E8%BF%87%E9%95%BF%E5%9F%8E%EF%BC%8C%E8%B5%B0%E5%90%91%E4%B8%96%E7%95%8C/" rel="tag">越过长城，走向世界</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=V2Ray服务器安装脚本及K2P路由器配置&url=https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html&pic=https://onenice.site/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=V2Ray服务器安装脚本及K2P路由器配置&url=https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html&via=柒語" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+        <a class="post_share-link" href="https://telegram.me/share/url?url=https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/index.html&text=V2Ray服务器安装脚本及K2P路由器配置" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Telegram
+            </li>
+        </a>
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h2 id="服务器端配置"><a href="#服务器端配置" class="headerlink" title="服务器端配置"></a>服务器端配置</h2><p>我的VPS使用CentOS8系统，可直接开启BBR：</p>
+<pre><code class="sh">echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+sysctl -p</code></pre>
+<p>使用<strong>Vmess+websocket+TLS+Nginx+Website</strong>的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）</p>
+<p><code>bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log</code></p>
+<p><strong>脚本管理命令</strong></p>
+<p>启动 V2ray：<code>systemctl start v2ray</code></p>
+<p>停止 V2ray：<code>systemctl stop v2ray</code></p>
+<p>启动 Nginx：<code>systemctl start nginx</code></p>
+<p>停止 Nginx：<code>systemctl stop nginx</code></p>
+<p><strong>脚本相关目录</strong></p>
+<p>Web 目录：<code>/home/wwwroot/levis</code></p>
+<p>V2ray 服务端配置：<code>/etc/v2ray/config.json</code></p>
+<p>V2ray 客户端配置：执行安装时所在目录下的 <code>v2ray_info.txt</code></p>
+<p>Nginx 目录：<code>/etc/nginx</code></p>
+<p>证书目录：<code>/data/v2ray.key 和 /data/v2ray.crt</code></p>
+<h2 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h2><p>参考链接：<a href="http://iytc.net/wordpress/?p=4243" target="_blank" rel="noopener">http://iytc.net/wordpress/?p=4243</a></p>
+<pre><code class="js">{
+  &quot;inbound&quot;: {
+    &quot;protocol&quot;: &quot;dokodemo-door&quot;,
+    &quot;port&quot;: 1234,  
+    &quot;settings&quot;: {
+    &quot;network&quot;: &quot;tcp&quot;,
+    &quot;timeout&quot;: 30,
+    &quot;followRedirect&quot;: true
+    }
+  },
+  &quot;outbound&quot;: {
+    &quot;protocol&quot;: &quot;vmess&quot;,
+    &quot;settings&quot;: {
+    &quot;udp&quot;: true,
+      &quot;vnext&quot;: [{
+        &quot;address&quot;: &quot;fuckgfw.tk&quot;, 
+        &quot;port&quot;: 443,  
+     &quot;users&quot;: [
+        {
+          &quot;id&quot;: &quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&quot;,
+          &quot;alterId&quot;: 64,
+          &quot;security&quot;: &quot;auto&quot;,
+          &quot;level&quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &quot;streamSettings&quot;: {
+      &quot;network&quot;: &quot;ws&quot;,
+      &quot;security&quot;: &quot;tls&quot;,
+      &quot;tlsSettings&quot;: {
+        &quot;serverName&quot;: &quot;fuckgfw.tk&quot;,
+        &quot;allowInsecure&quot;: true
+       },
+      &quot;wsSettings&quot;: {
+        &quot;connectionReuse&quot;: true,
+        &quot;path&quot;: &quot;/19890604/&quot;
+      }
+    }
+}
+}</code></pre>
+<p>下面为一键安装脚本备份</p>
+<a id="more"></a>
+
+<pre><code class="sh">#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+cd &quot;$(
+    cd &quot;$(dirname &quot;$0&quot;)&quot; || exit
+    pwd
+)&quot; || exit
+#====================================================
+#    System Request:Debian 9+/Ubuntu 18.04+/Centos 7+
+#    Author:    wulabing
+#    Dscription: V2ray ws+tls onekey Management
+#    Version: 1.0
+#    email:admin@wulabing.com
+#    Official document: www.v2ray.com
+#====================================================
+#fonts color
+Green=&quot;\033[32m&quot;
+Red=&quot;\033[31m&quot;
+# Yellow=&quot;\033[33m&quot;
+GreenBG=&quot;\033[42;37m&quot;
+RedBG=&quot;\033[41;37m&quot;
+Font=&quot;\033[0m&quot;
+#notification information
+# Info=&quot;${Green}[信息]${Font}&quot;
+OK=&quot;${Green}[OK]${Font}&quot;
+Error=&quot;${Red}[错误]${Font}&quot;
+# 版本
+shell_version=&quot;1.1.3.2&quot;
+shell_mode=&quot;None&quot;
+github_branch=&quot;master&quot;
+version_cmp=&quot;/tmp/version_cmp.tmp&quot;
+v2ray_conf_dir=&quot;/etc/v2ray&quot;
+nginx_conf_dir=&quot;/etc/nginx/conf/conf.d&quot;
+v2ray_conf=&quot;${v2ray_conf_dir}/config.json&quot;
+nginx_conf=&quot;${nginx_conf_dir}/v2ray.conf&quot;
+nginx_dir=&quot;/etc/nginx&quot;
+web_dir=&quot;/home/wwwroot&quot;
+nginx_openssl_src=&quot;/usr/local/src&quot;
+v2ray_bin_dir=&quot;/usr/bin/v2ray&quot;
+v2ray_info_file=&quot;$HOME/v2ray_info.inf&quot;
+v2ray_qr_config_file=&quot;/usr/local/vmess_qr.json&quot;
+nginx_systemd_file=&quot;/etc/systemd/system/nginx.service&quot;
+v2ray_systemd_file=&quot;/etc/systemd/system/v2ray.service&quot;
+v2ray_access_log=&quot;/var/log/v2ray/access.log&quot;
+v2ray_error_log=&quot;/var/log/v2ray/error.log&quot;
+amce_sh_file=&quot;/root/.acme.sh/acme.sh&quot;
+ssl_update_file=&quot;/usr/bin/ssl_update.sh&quot;
+nginx_version=&quot;1.16.1&quot;
+openssl_version=&quot;1.1.1d&quot;
+jemalloc_version=&quot;5.2.1&quot;
+old_config_status=&quot;off&quot;
+# v2ray_plugin_version=&quot;$(wget -qO- &quot;https://github.com/shadowsocks/v2ray-plugin/tags&quot; | grep -E &quot;/shadowsocks/v2ray-plugin/releases/tag/&quot; | head -1 | sed -r &#39;s/.*tag\/v(.+)\&quot;&gt;.*/\1/&#39;)&quot;
+#移动旧版本配置信息 对小于 1.1.0 版本适配
+[[ -f &quot;/etc/v2ray/vmess_qr.json&quot; ]] &amp;&amp; mv /etc/v2ray/vmess_qr.json $v2ray_qr_config_file
+#生成伪装路径
+camouflage=&quot;/$(head -n 10 /dev/urandom | md5sum | head -c 8)/&quot;
+source &#39;/etc/os-release&#39;
+#从VERSION中提取发行版系统的英文名称，为了在debian/ubuntu下添加相对应的Nginx apt源
+VERSION=$(echo &quot;${VERSION}&quot; | awk -F &quot;[()]&quot; &#39;{print $2}&#39;)
+check_system() {
+    if [[ &quot;${ID}&quot; == &quot;centos&quot; &amp;&amp; ${VERSION_ID} -ge 7 ]]; then
+        echo -e &quot;${OK} ${GreenBG} 当前系统为 Centos ${VERSION_ID} ${VERSION} ${Font}&quot;
+        INS=&quot;yum&quot;
+    elif [[ &quot;${ID}&quot; == &quot;debian&quot; &amp;&amp; ${VERSION_ID} -ge 8 ]]; then
+        echo -e &quot;${OK} ${GreenBG} 当前系统为 Debian ${VERSION_ID} ${VERSION} ${Font}&quot;
+        INS=&quot;apt&quot;
+        $INS update
+        ## 添加 Nginx apt源
+    elif [[ &quot;${ID}&quot; == &quot;ubuntu&quot; &amp;&amp; $(echo &quot;${VERSION_ID}&quot; | cut -d &#39;.&#39; -f1) -ge 16 ]]; then
+        echo -e &quot;${OK} ${GreenBG} 当前系统为 Ubuntu ${VERSION_ID} ${UBUNTU_CODENAME} ${Font}&quot;
+        INS=&quot;apt&quot;
+        $INS update
+    else
+        echo -e &quot;${Error} ${RedBG} 当前系统为 ${ID} ${VERSION_ID} 不在支持的系统列表内，安装中断 ${Font}&quot;
+        exit 1
+    fi
+$INS install dbus
+systemctl stop firewalld
+    systemctl disable firewalld
+    echo -e &quot;${OK} ${GreenBG} firewalld 已关闭 ${Font}&quot;
+systemctl stop ufw
+    systemctl disable ufw
+    echo -e &quot;${OK} ${GreenBG} ufw 已关闭 ${Font}&quot;
+}
+is_root() {
+    if [ 0 == $UID ]; then
+        echo -e &quot;${OK} ${GreenBG} 当前用户是root用户，进入安装流程 ${Font}&quot;
+        sleep 3
+    else
+        echo -e &quot;${Error} ${RedBG} 当前用户不是root用户，请切换到root用户后重新执行脚本 ${Font}&quot;
+        exit 1
+    fi
+}
+judge() {
+    if [[ 0 -eq $? ]]; then
+        echo -e &quot;${OK} ${GreenBG} $1 完成 ${Font}&quot;
+        sleep 1
+    else
+        echo -e &quot;${Error} ${RedBG} $1 失败${Font}&quot;
+        exit 1
+    fi
+}
+chrony_install() {
+    ${INS} -y install chrony
+    judge &quot;安装 chrony 时间同步服务 &quot;
+timedatectl set-ntp true
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        systemctl enable chronyd &amp;&amp; systemctl restart chronyd
+    else
+        systemctl enable chrony &amp;&amp; systemctl restart chrony
+    fi
+judge &quot;chronyd 启动 &quot;
+timedatectl set-timezone Asia/Shanghai
+echo -e &quot;${OK} ${GreenBG} 等待时间同步 ${Font}&quot;
+    sleep 10
+chronyc sourcestats -v
+    chronyc tracking -v
+    date
+    read -rp &quot;请确认时间是否准确,误差范围±3分钟(Y/N): &quot; chrony_install
+    [[ -z ${chrony_install} ]] &amp;&amp; chrony_install=&quot;Y&quot;
+    case $chrony_install in
+    [yY][eE][sS] | [yY])
+        echo -e &quot;${GreenBG} 继续安装 ${Font}&quot;
+        sleep 2
+        ;;
+    *)
+        echo -e &quot;${RedBG} 安装终止 ${Font}&quot;
+        exit 2
+        ;;
+    esac
+}
+dependency_install() {
+    ${INS} install wget git lsof -y
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        ${INS} -y install crontabs
+    else
+        ${INS} -y install cron
+    fi
+    judge &quot;安装 crontab&quot;
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        touch /var/spool/cron/root &amp;&amp; chmod 600 /var/spool/cron/root
+        systemctl start crond &amp;&amp; systemctl enable crond
+    else
+        touch /var/spool/cron/crontabs/root &amp;&amp; chmod 600 /var/spool/cron/crontabs/root
+        systemctl start cron &amp;&amp; systemctl enable cron
+fi
+    judge &quot;crontab 自启动配置 &quot;
+${INS} -y install bc
+    judge &quot;安装 bc&quot;
+${INS} -y install unzip
+    judge &quot;安装 unzip&quot;
+${INS} -y install qrencode
+    judge &quot;安装 qrencode&quot;
+${INS} -y install curl
+    judge &quot;安装 crul&quot;
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        ${INS} -y groupinstall &quot;Development tools&quot;
+    else
+        ${INS} -y install build-essential
+    fi
+    judge &quot;编译工具包 安装&quot;
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        ${INS} -y install pcre pcre-devel zlib-devel epel-release
+    else
+        ${INS} -y install libpcre3 libpcre3-dev zlib1g-dev dbus
+    fi
+#    ${INS} -y install rng-tools
+    #    judge &quot;rng-tools 安装&quot;
+${INS} -y install haveged
+    #    judge &quot;haveged 安装&quot;
+#    sed -i -r &#39;/^HRNGDEVICE/d;/#HRNGDEVICE=\/dev\/null/a HRNGDEVICE=/dev/urandom&#39; /etc/default/rng-tools
+if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        #       systemctl start rngd &amp;&amp; systemctl enable rngd
+        #       judge &quot;rng-tools 启动&quot;
+        systemctl start haveged &amp;&amp; systemctl enable haveged
+        #       judge &quot;haveged 启动&quot;
+    else
+        #       systemctl start rng-tools &amp;&amp; systemctl enable rng-tools
+        #       judge &quot;rng-tools 启动&quot;
+        systemctl start haveged &amp;&amp; systemctl enable haveged
+        #       judge &quot;haveged 启动&quot;
+    fi
+}
+basic_optimization() {
+    # 最大文件打开数
+    sed -i &#39;/^\*\ *soft\ *nofile\ *[[:digit:]]*/d&#39; /etc/security/limits.conf
+    sed -i &#39;/^\*\ *hard\ *nofile\ *[[:digit:]]*/d&#39; /etc/security/limits.conf
+    echo &#39;* soft nofile 65536&#39; &gt;&gt;/etc/security/limits.conf
+    echo &#39;* hard nofile 65536&#39; &gt;&gt;/etc/security/limits.conf
+# 关闭 Selinux
+    if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        sed -i &#39;s/^SELINUX=.*/SELINUX=disabled/&#39; /etc/selinux/config
+        setenforce 0
+    fi
+}
+port_alterid_set() {
+    if [[ &quot;on&quot; != &quot;$old_config_status&quot; ]]; then
+        read -rp &quot;请输入连接端口（default:443）:&quot; port
+        [[ -z ${port} ]] &amp;&amp; port=&quot;443&quot;
+        read -rp &quot;请输入alterID（default:2 仅允许填数字）:&quot; alterID
+        [[ -z ${alterID} ]] &amp;&amp; alterID=&quot;2&quot;
+    fi
+}
+modify_path() {
+    if [[ &quot;on&quot; == &quot;$old_config_status&quot; ]]; then
+        camouflage=&quot;$(grep &#39;\&quot;path\&quot;&#39; $v2ray_qr_config_file | awk -F &#39;&quot;&#39; &#39;{print $4}&#39;)&quot;
+    fi
+    sed -i &quot;/\&quot;path\&quot;/c \\\t  \&quot;path\&quot;:\&quot;${camouflage}\&quot;&quot; ${v2ray_conf}
+    judge &quot;V2ray 伪装路径 修改&quot;
+}
+modify_alterid() {
+    if [[ &quot;on&quot; == &quot;$old_config_status&quot; ]]; then
+        alterID=&quot;$(grep &#39;\&quot;aid\&quot;&#39; $v2ray_qr_config_file | awk -F &#39;&quot;&#39; &#39;{print $4}&#39;)&quot;
+    fi
+    sed -i &quot;/\&quot;alterId\&quot;/c \\\t  \&quot;alterId\&quot;:${alterID}&quot; ${v2ray_conf}
+    judge &quot;V2ray alterid 修改&quot;
+    [ -f ${v2ray_qr_config_file} ] &amp;&amp; sed -i &quot;/\&quot;aid\&quot;/c \\  \&quot;aid\&quot;: \&quot;${alterID}\&quot;,&quot; ${v2ray_qr_config_file}
+    echo -e &quot;${OK} ${GreenBG} alterID:${alterID} ${Font}&quot;
+}
+modify_inbound_port() {
+    if [[ &quot;on&quot; == &quot;$old_config_status&quot; ]]; then
+        port=&quot;$(info_extraction &#39;\&quot;port\&quot;&#39;)&quot;
+    fi
+    if [[ &quot;$shell_mode&quot; != &quot;h2&quot; ]]; then
+        PORT=$((RANDOM + 10000))
+        sed -i &quot;/\&quot;port\&quot;/c  \    \&quot;port\&quot;:${PORT},&quot; ${v2ray_conf}
+    else
+        sed -i &quot;/\&quot;port\&quot;/c  \    \&quot;port\&quot;:${port},&quot; ${v2ray_conf}
+    fi
+    judge &quot;V2ray inbound_port 修改&quot;
+}
+modify_UUID() {
+    [ -z &quot;$UUID&quot; ] &amp;&amp; UUID=$(cat /proc/sys/kernel/random/uuid)
+    if [[ &quot;on&quot; == &quot;$old_config_status&quot; ]]; then
+        UUID=&quot;$(info_extraction &#39;\&quot;id\&quot;&#39;)&quot;
+    fi
+    sed -i &quot;/\&quot;id\&quot;/c \\\t  \&quot;id\&quot;:\&quot;${UUID}\&quot;,&quot; ${v2ray_conf}
+    judge &quot;V2ray UUID 修改&quot;
+    [ -f ${v2ray_qr_config_file} ] &amp;&amp; sed -i &quot;/\&quot;id\&quot;/c \\  \&quot;id\&quot;: \&quot;${UUID}\&quot;,&quot; ${v2ray_qr_config_file}
+    echo -e &quot;${OK} ${GreenBG} UUID:${UUID} ${Font}&quot;
+}
+modify_nginx_port() {
+    if [[ &quot;on&quot; == &quot;$old_config_status&quot; ]]; then
+        port=&quot;$(info_extraction &#39;\&quot;port\&quot;&#39;)&quot;
+    fi
+    sed -i &quot;/ssl http2;$/c \\\tlisten ${port} ssl http2;&quot; ${nginx_conf}
+    judge &quot;V2ray port 修改&quot;
+    [ -f ${v2ray_qr_config_file} ] &amp;&amp; sed -i &quot;/\&quot;port\&quot;/c \\  \&quot;port\&quot;: \&quot;${port}\&quot;,&quot; ${v2ray_qr_config_file}
+    echo -e &quot;${OK} ${GreenBG} 端口号:${port} ${Font}&quot;
+}
+modify_nginx_other() {
+    sed -i &quot;/server_name/c \\\tserver_name ${domain};&quot; ${nginx_conf}
+    sed -i &quot;/location/c \\\tlocation ${camouflage}&quot; ${nginx_conf}
+    sed -i &quot;/proxy_pass/c \\\tproxy_pass http://127.0.0.1:${PORT};&quot; ${nginx_conf}
+    sed -i &quot;/return/c \\\treturn 301 https://${domain}\$request_uri;&quot; ${nginx_conf}
+    #sed -i &quot;27i \\\tproxy_intercept_errors on;&quot;  ${nginx_dir}/conf/nginx.conf
+}
+web_camouflage() {
+    ##请注意 这里和LNMP脚本的默认路径冲突，千万不要在安装了LNMP的环境下使用本脚本，否则后果自负
+    rm -rf /home/wwwroot
+    mkdir -p /home/wwwroot
+    cd /home/wwwroot || exit
+    git clone https://github.com/wulabing/3DCEList.git
+    judge &quot;web 站点伪装&quot;
+}
+v2ray_install() {
+    if [[ -d /root/v2ray ]]; then
+        rm -rf /root/v2ray
+    fi
+    if [[ -d /etc/v2ray ]]; then
+        rm -rf /etc/v2ray
+    fi
+    mkdir -p /root/v2ray
+    cd /root/v2ray || exit
+    wget -N --no-check-certificate https://install.direct/go.sh
+## wget http://install.direct/go.sh
+if [[ -f go.sh ]]; then
+        rm -rf $v2ray_systemd_file
+        systemctl daemon-reload
+        bash go.sh --force
+        judge &quot;安装 V2ray&quot;
+    else
+        echo -e &quot;${Error} ${RedBG} V2ray 安装文件下载失败，请检查下载地址是否可用 ${Font}&quot;
+        exit 4
+    fi
+    # 清除临时文件
+    rm -rf /root/v2ray
+}
+nginx_exist_check() {
+    if [[ -f &quot;/etc/nginx/sbin/nginx&quot; ]]; then
+        echo -e &quot;${OK} ${GreenBG} Nginx已存在，跳过编译安装过程 ${Font}&quot;
+        sleep 2
+    elif [[ -d &quot;/usr/local/nginx/&quot; ]]; then
+        echo -e &quot;${OK} ${GreenBG} 检测到其他套件安装的Nginx，继续安装会造成冲突，请处理后安装${Font}&quot;
+        exit 1
+    else
+        nginx_install
+    fi
+}
+nginx_install() {
+    #    if [[ -d &quot;/etc/nginx&quot; ]];then
+    #        rm -rf /etc/nginx
+    #    fi
+wget -nc --no-check-certificate http://nginx.org/download/nginx-${nginx_version}.tar.gz -P ${nginx_openssl_src}
+    judge &quot;Nginx 下载&quot;
+    wget -nc --no-check-certificate https://www.openssl.org/source/openssl-${openssl_version}.tar.gz -P ${nginx_openssl_src}
+    judge &quot;openssl 下载&quot;
+    wget -nc --no-check-certificate https://github.com/jemalloc/jemalloc/releases/download/${jemalloc_version}/jemalloc-${jemalloc_version}.tar.bz2 -P ${nginx_openssl_src}
+    judge &quot;jemalloc 下载&quot;
+cd ${nginx_openssl_src} || exit
+[[ -d nginx-&quot;$nginx_version&quot; ]] &amp;&amp; rm -rf nginx-&quot;$nginx_version&quot;
+    tar -zxvf nginx-&quot;$nginx_version&quot;.tar.gz
+[[ -d openssl-&quot;$openssl_version&quot; ]] &amp;&amp; rm -rf openssl-&quot;$openssl_version&quot;
+    tar -zxvf openssl-&quot;$openssl_version&quot;.tar.gz
+[[ -d jemalloc-&quot;${jemalloc_version}&quot; ]] &amp;&amp; rm -rf jemalloc-&quot;${jemalloc_version}&quot;
+    tar -xvf jemalloc-&quot;${jemalloc_version}&quot;.tar.bz2
+[[ -d &quot;$nginx_dir&quot; ]] &amp;&amp; rm -rf ${nginx_dir}
+echo -e &quot;${OK} ${GreenBG} 即将开始编译安装 jemalloc ${Font}&quot;
+    sleep 2
+cd jemalloc-${jemalloc_version} || exit
+    ./configure
+    judge &quot;编译检查&quot;
+    make &amp;&amp; make install
+    judge &quot;jemalloc 编译安装&quot;
+    echo &#39;/usr/local/lib&#39; &gt;/etc/ld.so.conf.d/local.conf
+    ldconfig
+echo -e &quot;${OK} ${GreenBG} 即将开始编译安装 Nginx, 过程稍久，请耐心等待 ${Font}&quot;
+    sleep 4
+cd ../nginx-${nginx_version} || exit
+./configure --prefix=&quot;${nginx_dir}&quot; \
+        --with-http_ssl_module \
+        --with-http_gzip_static_module \
+        --with-http_stub_status_module \
+        --with-pcre \
+        --with-http_realip_module \
+        --with-http_flv_module \
+        --with-http_mp4_module \
+        --with-http_secure_link_module \
+        --with-http_v2_module \
+        --with-cc-opt=&#39;-O3&#39; \
+        --with-ld-opt=&quot;-ljemalloc&quot; \
+        --with-openssl=../openssl-&quot;$openssl_version&quot;
+    judge &quot;编译检查&quot;
+    make &amp;&amp; make install
+    judge &quot;Nginx 编译安装&quot;
+# 修改基本配置
+    sed -i &#39;s/#user  nobody;/user  root;/&#39; ${nginx_dir}/conf/nginx.conf
+    sed -i &#39;s/worker_processes  1;/worker_processes  3;/&#39; ${nginx_dir}/conf/nginx.conf
+    sed -i &#39;s/    worker_connections  1024;/    worker_connections  4096;/&#39; ${nginx_dir}/conf/nginx.conf
+    sed -i &#39;$i include conf.d/*.conf;&#39; ${nginx_dir}/conf/nginx.conf
+# 删除临时文件
+    rm -rf ../nginx-&quot;${nginx_version}&quot;
+    rm -rf ../openssl-&quot;${openssl_version}&quot;
+    rm -rf ../nginx-&quot;${nginx_version}&quot;.tar.gz
+    rm -rf ../openssl-&quot;${openssl_version}&quot;.tar.gz
+# 添加配置文件夹，适配旧版脚本
+    mkdir ${nginx_dir}/conf/conf.d
+}
+ssl_install() {
+    if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        ${INS} install socat nc -y
+    else
+        ${INS} install socat netcat -y
+    fi
+    judge &quot;安装 SSL 证书生成脚本依赖&quot;
+curl https://get.acme.sh | sh
+    judge &quot;安装 SSL 证书生成脚本&quot;
+}
+domain_check() {
+    read -rp &quot;请输入你的域名信息(eg:www.wulabing.com):&quot; domain
+    domain_ip=$(ping &quot;${domain}&quot; -c 1 | sed &#39;1{s/[^(]*(//;s/).*//;q}&#39;)
+    echo -e &quot;${OK} ${GreenBG} 正在获取 公网ip 信息，请耐心等待 ${Font}&quot;
+    local_ip=$(curl -4 ip.sb)
+    echo -e &quot;域名dns解析IP：${domain_ip}&quot;
+    echo -e &quot;本机IP: ${local_ip}&quot;
+    sleep 2
+    if [[ $(echo &quot;${local_ip}&quot; | tr &#39;.&#39; &#39;+&#39; | bc) -eq $(echo &quot;${domain_ip}&quot; | tr &#39;.&#39; &#39;+&#39; | bc) ]]; then
+        echo -e &quot;${OK} ${GreenBG} 域名dns解析IP 与 本机IP 匹配 ${Font}&quot;
+        sleep 2
+    else
+        echo -e &quot;${Error} ${RedBG} 请确保域名添加了正确的 A 记录，否则将无法正常使用 V2ray ${Font}&quot;
+        echo -e &quot;${Error} ${RedBG} 域名dns解析IP 与 本机IP 不匹配 是否继续安装？（y/n）${Font}&quot; &amp;&amp; read -r install
+        case $install in
+        [yY][eE][sS] | [yY])
+            echo -e &quot;${GreenBG} 继续安装 ${Font}&quot;
+            sleep 2
+            ;;
+        *)
+            echo -e &quot;${RedBG} 安装终止 ${Font}&quot;
+            exit 2
+            ;;
+        esac
+    fi
+}
+port_exist_check() {
+    if [[ 0 -eq $(lsof -i:&quot;$1&quot; | grep -i -c &quot;listen&quot;) ]]; then
+        echo -e &quot;${OK} ${GreenBG} $1 端口未被占用 ${Font}&quot;
+        sleep 1
+    else
+        echo -e &quot;${Error} ${RedBG} 检测到 $1 端口被占用，以下为 $1 端口占用信息 ${Font}&quot;
+        lsof -i:&quot;$1&quot;
+        echo -e &quot;${OK} ${GreenBG} 5s 后将尝试自动 kill 占用进程 ${Font}&quot;
+        sleep 5
+        lsof -i:&quot;$1&quot; | awk &#39;{print $2}&#39; | grep -v &quot;PID&quot; | xargs kill -9
+        echo -e &quot;${OK} ${GreenBG} kill 完成 ${Font}&quot;
+        sleep 1
+    fi
+}
+acme() {
+    if &quot;$HOME&quot;/.acme.sh/acme.sh --issue -d &quot;${domain}&quot; --standalone -k ec-256 --force --test; then
+        echo -e &quot;${OK} ${GreenBG} SSL 证书测试签发成功，开始正式签发 ${Font}&quot;
+        rm -rf &quot;$HOME/.acme.sh/${domain}_ecc&quot;
+        sleep 2
+    else
+        echo -e &quot;${Error} ${RedBG} SSL 证书测试签发失败 ${Font}&quot;
+        rm -rf &quot;$HOME/.acme.sh/${domain}_ecc&quot;
+        exit 1
+    fi
+if &quot;$HOME&quot;/.acme.sh/acme.sh --issue -d &quot;${domain}&quot; --standalone -k ec-256 --force; then
+        echo -e &quot;${OK} ${GreenBG} SSL 证书生成成功 ${Font}&quot;
+        sleep 2
+        mkdir /data
+        if &quot;$HOME&quot;/.acme.sh/acme.sh --installcert -d &quot;${domain}&quot; --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc --force; then
+            echo -e &quot;${OK} ${GreenBG} 证书配置成功 ${Font}&quot;
+            sleep 2
+        fi
+    else
+        echo -e &quot;${Error} ${RedBG} SSL 证书生成失败 ${Font}&quot;
+        rm -rf &quot;$HOME/.acme.sh/${domain}_ecc&quot;
+        exit 1
+    fi
+}
+v2ray_conf_add_tls() {
+    cd /etc/v2ray || exit
+    wget --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/tls/config.json -O config.json
+    modify_path
+    modify_alterid
+    modify_inbound_port
+    modify_UUID
+}
+v2ray_conf_add_h2() {
+    cd /etc/v2ray || exit
+    wget --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/http2/config.json -O config.json
+    modify_path
+    modify_alterid
+    modify_inbound_port
+    modify_UUID
+}
+old_config_exist_check() {
+    if [[ -f $v2ray_qr_config_file ]]; then
+        echo -e &quot;${OK} ${GreenBG} 检测到旧配置文件，是否读取旧文件配置 [Y/N]? ${Font}&quot;
+        read -r ssl_delete
+        case $ssl_delete in
+        [yY][eE][sS] | [yY])
+            echo -e &quot;${OK} ${GreenBG} 已保留旧配置  ${Font}&quot;
+            old_config_status=&quot;on&quot;
+            port=$(info_extraction &#39;\&quot;port\&quot;&#39;)
+            ;;
+        *)
+            rm -rf $v2ray_qr_config_file
+            echo -e &quot;${OK} ${GreenBG} 已删除旧配置  ${Font}&quot;
+            ;;
+        esac
+    fi
+}
+nginx_conf_add() {
+    touch ${nginx_conf_dir}/v2ray.conf
+    cat &gt;${nginx_conf_dir}/v2ray.conf &lt;&lt;EOF
+    server {
+        listen 443 ssl http2;
+        ssl_certificate       /data/v2ray.crt;
+        ssl_certificate_key   /data/v2ray.key;
+        ssl_protocols         TLSv1.3;
+        ssl_ciphers           TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+ECDSA+AES128:EECDH+aRSA+AES128:RSA+AES128:EECDH+ECDSA+AES256:EECDH+aRSA+AES256:RSA+AES256:EECDH+ECDSA+3DES:EECDH+aRSA+3DES:RSA+3DES:!MD5;
+        server_name           serveraddr.com;
+        index index.html index.htm;
+        root  /home/wwwroot/3DCEList;
+        error_page 400 = /400.html;
+        location /ray/
+        {
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:10000;
+        proxy_http_version 1.1;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header Host \$http_host;
+        }
+}
+    server {
+        listen 80;
+        server_name serveraddr.com;
+        return 301 https://use.shadowsocksr.win\$request_uri;
+    }
+EOF
+modify_nginx_port
+    modify_nginx_other
+    judge &quot;Nginx 配置修改&quot;
+}
+start_process_systemd() {
+    systemctl daemon-reload
+    if [[ &quot;$shell_mode&quot; != &quot;h2&quot; ]]; then
+        systemctl restart nginx
+        judge &quot;Nginx 启动&quot;
+    fi
+    systemctl restart v2ray
+    judge &quot;V2ray 启动&quot;
+}
+enable_process_systemd() {
+    systemctl enable v2ray
+    judge &quot;设置 v2ray 开机自启&quot;
+    if [[ &quot;$shell_mode&quot; != &quot;h2&quot; ]]; then
+        systemctl enable nginx
+        judge &quot;设置 Nginx 开机自启&quot;
+    fi
+}
+stop_process_systemd() {
+    if [[ &quot;$shell_mode&quot; != &quot;h2&quot; ]]; then
+        systemctl stop nginx
+    fi
+    systemctl stop v2ray
+}
+nginx_process_disabled() {
+    [ -f $nginx_systemd_file ] &amp;&amp; systemctl stop nginx &amp;&amp; systemctl disable nginx
+}
+#debian 系 9 10 适配
+#rc_local_initialization(){
+#    if [[ -f /etc/rc.local ]];then
+#        chmod +x /etc/rc.local
+#    else
+#        touch /etc/rc.local &amp;&amp; chmod +x /etc/rc.local
+#        echo &quot;#!/bin/bash&quot; &gt;&gt; /etc/rc.local
+#        systemctl start rc-local
+#    fi
+#
+#    judge &quot;rc.local 配置&quot;
+#}
+acme_cron_update() {
+    wget -N -P /usr/bin --no-check-certificate &quot;https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/dev/ssl_update.sh&quot;
+    if [[ &quot;${ID}&quot; == &quot;centos&quot; ]]; then
+        #        sed -i &quot;/acme.sh/c 0 3 * * 0 \&quot;/root/.acme.sh\&quot;/acme.sh --cron --home \&quot;/root/.acme.sh\&quot; \
+        #        &amp;&gt; /dev/null&quot; /var/spool/cron/root
+        sed -i &quot;/acme.sh/c 0 3 * * 0 bash ${ssl_update_file}&quot; /var/spool/cron/root
+    else
+        #        sed -i &quot;/acme.sh/c 0 3 * * 0 \&quot;/root/.acme.sh\&quot;/acme.sh --cron --home \&quot;/root/.acme.sh\&quot; \
+        #        &amp;&gt; /dev/null&quot; /var/spool/cron/crontabs/root
+        sed -i &quot;/acme.sh/c 0 3 * * 0 bash ${ssl_update_file}&quot; /var/spool/cron/crontabs/root
+    fi
+    judge &quot;cron 计划任务更新&quot;
+}
+vmess_qr_config_tls_ws() {
+    cat &gt;$v2ray_qr_config_file &lt;&lt;-EOF
+{
+  &quot;v&quot;: &quot;2&quot;,
+  &quot;ps&quot;: &quot;wulabing_${domain}&quot;,
+  &quot;add&quot;: &quot;${domain}&quot;,
+  &quot;port&quot;: &quot;${port}&quot;,
+  &quot;id&quot;: &quot;${UUID}&quot;,
+  &quot;aid&quot;: &quot;${alterID}&quot;,
+  &quot;net&quot;: &quot;ws&quot;,
+  &quot;type&quot;: &quot;none&quot;,
+  &quot;host&quot;: &quot;${domain}&quot;,
+  &quot;path&quot;: &quot;${camouflage}&quot;,
+  &quot;tls&quot;: &quot;tls&quot;
+}
+EOF
+}
+vmess_qr_config_h2() {
+    cat &gt;$v2ray_qr_config_file &lt;&lt;-EOF
+{
+  &quot;v&quot;: &quot;2&quot;,
+  &quot;ps&quot;: &quot;wulabing_${domain}&quot;,
+  &quot;add&quot;: &quot;${domain}&quot;,
+  &quot;port&quot;: &quot;${port}&quot;,
+  &quot;id&quot;: &quot;${UUID}&quot;,
+  &quot;aid&quot;: &quot;${alterID}&quot;,
+  &quot;net&quot;: &quot;h2&quot;,
+  &quot;type&quot;: &quot;none&quot;,
+  &quot;path&quot;: &quot;${camouflage}&quot;,
+  &quot;tls&quot;: &quot;tls&quot;
+}
+EOF
+}
+vmess_qr_link_image() {
+    vmess_link=&quot;vmess://$(base64 -w 0 $v2ray_qr_config_file)&quot;
+    {
+        echo -e &quot;$Red 二维码: $Font&quot;
+        echo -n &quot;${vmess_link}&quot; | qrencode -o - -t utf8
+        echo -e &quot;${Red} URL导入链接:${vmess_link} ${Font}&quot;
+    } &gt;&gt;&quot;${v2ray_info_file}&quot;
+}
+info_extraction() {
+    grep &quot;$1&quot; $v2ray_qr_config_file | awk -F &#39;&quot;&#39; &#39;{print $4}&#39;
+}
+basic_information() {
+    {
+        echo -e &quot;${OK} ${GreenBG} V2ray+ws+tls 安装成功&quot;
+        echo -e &quot;${Red} V2ray 配置信息 ${Font}&quot;
+        echo -e &quot;${Red} 地址（address）:${Font} $(info_extraction &#39;\&quot;add\&quot;&#39;) &quot;
+        echo -e &quot;${Red} 端口（port）：${Font} $(info_extraction &#39;\&quot;port\&quot;&#39;) &quot;
+        echo -e &quot;${Red} 用户id（UUID）：${Font} $(info_extraction &#39;\&quot;id\&quot;&#39;)&quot;
+        echo -e &quot;${Red} 额外id（alterId）：${Font} $(info_extraction &#39;\&quot;aid\&quot;&#39;)&quot;
+        echo -e &quot;${Red} 加密方式（security）：${Font} 自适应 &quot;
+        echo -e &quot;${Red} 传输协议（network）：${Font} $(info_extraction &#39;\&quot;net\&quot;&#39;) &quot;
+        echo -e &quot;${Red} 伪装类型（type）：${Font} none &quot;
+        echo -e &quot;${Red} 路径（不要落下/）：${Font} $(info_extraction &#39;\&quot;path\&quot;&#39;) &quot;
+        echo -e &quot;${Red} 底层传输安全：${Font} tls &quot;
+    } &gt;&quot;${v2ray_info_file}&quot;
+}
+show_information() {
+    cat &quot;${v2ray_info_file}&quot;
+}
+ssl_judge_and_install() {
+    if [[ -f &quot;/data/v2ray.key&quot; || -f &quot;/data/v2ray.crt&quot; ]]; then
+        echo &quot;/data 目录下证书文件已存在&quot;
+        echo -e &quot;${OK} ${GreenBG} 是否删除 [Y/N]? ${Font}&quot;
+        read -r ssl_delete
+        case $ssl_delete in
+        [yY][eE][sS] | [yY])
+            rm -rf /data/*
+            echo -e &quot;${OK} ${GreenBG} 已删除 ${Font}&quot;
+            ;;
+        *) ;;
+esac
+    fi
+if [[ -f &quot;/data/v2ray.key&quot; || -f &quot;/data/v2ray.crt&quot; ]]; then
+        echo &quot;证书文件已存在&quot;
+    elif [[ -f &quot;$HOME/.acme.sh/${domain}_ecc/${domain}.key&quot; &amp;&amp; -f &quot;$HOME/.acme.sh/${domain}_ecc/${domain}.cer&quot; ]]; then
+        echo &quot;证书文件已存在&quot;
+        &quot;$HOME&quot;/.acme.sh/acme.sh --installcert -d &quot;${domain}&quot; --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc
+        judge &quot;证书应用&quot;
+    else
+        ssl_install
+        acme
+    fi
+}
+nginx_systemd() {
+    cat &gt;$nginx_systemd_file &lt;&lt;EOF
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
+[Service]
+Type=forking
+PIDFile=/etc/nginx/logs/nginx.pid
+ExecStartPre=/etc/nginx/sbin/nginx -t
+ExecStart=/etc/nginx/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
+ExecReload=/etc/nginx/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT \$MAINPID
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target
+EOF
+judge &quot;Nginx systemd ServerFile 添加&quot;
+    systemctl daemon-reload
+}
+tls_type() {
+    if [[ -f &quot;/etc/nginx/sbin/nginx&quot; ]] &amp;&amp; [[ -f &quot;$nginx_conf&quot; ]] &amp;&amp; [[ &quot;$shell_mode&quot; == &quot;ws&quot; ]]; then
+        echo &quot;请选择支持的 TLS 版本（default:3）:&quot;
+        echo &quot;请注意,如果你使用 Quantaumlt X / 路由器 / 旧版 Shadowrocket / 低于 4.18.1 版本的 V2ray core 请选择 兼容模式&quot;
+        echo &quot;1: TLS1.1 TLS1.2 and TLS1.3（兼容模式）&quot;
+        echo &quot;2: TLS1.2 and TLS1.3 (兼容模式)&quot;
+        echo &quot;3: TLS1.3 only&quot;
+        read -rp &quot;请输入：&quot; tls_version
+        [[ -z ${tls_version} ]] &amp;&amp; tls_version=3
+        if [[ $tls_version == 3 ]]; then
+            sed -i &#39;s/ssl_protocols.*/ssl_protocols         TLSv1.3;/&#39; $nginx_conf
+            echo -e &quot;${OK} ${GreenBG} 已切换至 TLS1.3 only ${Font}&quot;
+        elif [[ $tls_version == 1 ]]; then
+            sed -i &#39;s/ssl_protocols.*/ssl_protocols         TLSv1.1 TLSv1.2 TLSv1.3;/&#39; $nginx_conf
+            echo -e &quot;${OK} ${GreenBG} 已切换至 TLS1.1 TLS1.2 and TLS1.3 ${Font}&quot;
+        else
+            sed -i &#39;s/ssl_protocols.*/ssl_protocols         TLSv1.2 TLSv1.3;/&#39; $nginx_conf
+            echo -e &quot;${OK} ${GreenBG} 已切换至 TLS1.2 and TLS1.3 ${Font}&quot;
+        fi
+        systemctl restart nginx
+        judge &quot;Nginx 重启&quot;
+    else
+        echo -e &quot;${Error} ${RedBG} Nginx 或 配置文件不存在 或当前安装版本为 h2 ，请正确安装脚本后执行${Font}&quot;
+    fi
+}
+show_access_log() {
+    [ -f ${v2ray_access_log} ] &amp;&amp; tail -f ${v2ray_access_log} || echo -e &quot;${RedBG}log文件不存在${Font}&quot;
+}
+show_error_log() {
+    [ -f ${v2ray_error_log} ] &amp;&amp; tail -f ${v2ray_error_log} || echo -e &quot;${RedBG}log文件不存在${Font}&quot;
+}
+ssl_update_manuel() {
+    [ -f ${amce_sh_file} ] &amp;&amp; &quot;/root/.acme.sh&quot;/acme.sh --cron --home &quot;/root/.acme.sh&quot; || echo -e &quot;${RedBG}证书签发工具不存在，请确认你是否使用了自己的证书${Font}&quot;
+    domain=&quot;$(info_extraction &#39;\&quot;add\&quot;&#39;)&quot;
+    &quot;$HOME&quot;/.acme.sh/acme.sh --installcert -d &quot;${domain}&quot; --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc
+}
+bbr_boost_sh() {
+    [ -f &quot;tcp.sh&quot; ] &amp;&amp; rm -rf ./tcp.sh
+    wget -N --no-check-certificate &quot;https://github.com/ylx2016/Linux-NetSpeed/releases/download/sh/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh
+}
+mtproxy_sh() {
+    [ -f &quot;mtproxy_go.sh&quot; ] &amp;&amp; rm -rf ./mtproxy_go.sh
+    wget -N --no-check-certificate https://github.com/whunt1/onekeymakemtg/raw/master/mtproxy_go.sh &amp;&amp; chmod +x mtproxy_go.sh &amp;&amp; ./mtproxy_go.sh
+}
+uninstall_all() {
+    stop_process_systemd
+    [[ -f $nginx_systemd_file ]] &amp;&amp; rm -f $nginx_systemd_file
+    [[ -f $v2ray_systemd_file ]] &amp;&amp; rm -f $v2ray_systemd_file
+    [[ -d $v2ray_bin_dir ]] &amp;&amp; rm -rf $v2ray_bin_dir
+    if [[ -d $nginx_dir ]]; then
+        echo -e &quot;${OK} ${Green} 是否卸载 Nginx [Y/N]? ${Font}&quot;
+        read -r uninstall_nginx
+        case $uninstall_nginx in
+        [yY][eE][sS] | [yY])
+            rm -rf $nginx_dir
+            echo -e &quot;${OK} ${Green} 已卸载 Nginx ${Font}&quot;
+            ;;
+        *) ;;
+esac
+    fi
+    [[ -d $v2ray_conf_dir ]] &amp;&amp; rm -rf $v2ray_conf_dir
+    [[ -d $web_dir ]] &amp;&amp; rm -rf $web_dir
+    systemctl daemon-reload
+    echo -e &quot;${OK} ${GreenBG} 已卸载，SSL证书文件已保留 ${Font}&quot;
+}
+delete_tls_key_and_crt() {
+    [[ -f $HOME/.acme.sh/acme.sh ]] &amp;&amp; /root/.acme.sh/acme.sh uninstall &gt;/dev/null 2&gt;&amp;1
+    [[ -d $HOME/.acme.sh ]] &amp;&amp; rm -rf &quot;$HOME/.acme.sh&quot;
+    echo -e &quot;${OK} ${GreenBG} 已清空证书遗留文件 ${Font}&quot;
+}
+judge_mode() {
+    if [ -f $v2ray_bin_dir/v2ray ]; then
+        if grep -q &quot;ws&quot; $v2ray_qr_config_file; then
+            shell_mode=&quot;ws&quot;
+        elif grep -q &quot;h2&quot; $v2ray_qr_config_file; then
+            shell_mode=&quot;h2&quot;
+        fi
+    fi
+}
+install_v2ray_ws_tls() {
+    is_root
+    check_system
+    chrony_install
+    dependency_install
+    basic_optimization
+    domain_check
+    old_config_exist_check
+    port_alterid_set
+    v2ray_install
+    port_exist_check 80
+    port_exist_check &quot;${port}&quot;
+    nginx_exist_check
+    v2ray_conf_add_tls
+    nginx_conf_add
+    web_camouflage
+    ssl_judge_and_install
+    nginx_systemd
+    vmess_qr_config_tls_ws
+    basic_information
+    vmess_qr_link_image
+    tls_type
+    show_information
+    start_process_systemd
+    enable_process_systemd
+    acme_cron_update
+}
+install_v2_h2() {
+    is_root
+    check_system
+    chrony_install
+    dependency_install
+    basic_optimization
+    domain_check
+    old_config_exist_check
+    port_alterid_set
+    v2ray_install
+    port_exist_check 80
+    port_exist_check &quot;${port}&quot;
+    v2ray_conf_add_h2
+    ssl_judge_and_install
+    vmess_qr_config_h2
+    basic_information
+    vmess_qr_link_image
+    show_information
+    start_process_systemd
+    enable_process_systemd
+}
+update_sh() {
+    ol_version=$(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/install.sh | grep &quot;shell_version=&quot; | head -1 | awk -F &#39;=|&quot;&#39; &#39;{print $3}&#39;)
+    echo &quot;$ol_version&quot; &gt;$version_cmp
+    echo &quot;$shell_version&quot; &gt;&gt;$version_cmp
+    if [[ &quot;$shell_version&quot; &lt; &quot;$(sort -rV $version_cmp | head -1)&quot; ]]; then
+        echo -e &quot;${OK} ${GreenBG} 存在新版本，是否更新 [Y/N]? ${Font}&quot;
+        read -r update_confirm
+        case $update_confirm in
+        [yY][eE][sS] | [yY])
+            wget -N --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/install.sh
+            echo -e &quot;${OK} ${GreenBG} 更新完成 ${Font}&quot;
+            exit 0
+            ;;
+        *) ;;
+esac
+    else
+        echo -e &quot;${OK} ${GreenBG} 当前版本为最新版本 ${Font}&quot;
+    fi
+}
+maintain() {
+    echo -e &quot;${RedBG}该选项暂时无法使用${Font}&quot;
+    echo -e &quot;${RedBG}$1${Font}&quot;
+    exit 0
+}
+list() {
+    case $1 in
+    tls_modify)
+        tls_type
+        ;;
+    uninstall)
+        uninstall_all
+        ;;
+    crontab_modify)
+        acme_cron_update
+        ;;
+    boost)
+        bbr_boost_sh
+        ;;
+    *)
+        menu
+        ;;
+    esac
+}
+menu() {
+    update_sh
+    echo -e &quot;\t V2ray 安装管理脚本 ${Red}[${shell_version}]${Font}&quot;
+    echo -e &quot;\t---authored by wulabing---&quot;
+    echo -e &quot;\thttps://github.com/wulabing\n&quot;
+    echo -e &quot;当前已安装版本:${shell_mode}\n&quot;
+echo -e &quot;—————————————— 安装向导 ——————————————&quot;&quot;&quot;
+    echo -e &quot;${Green}0.${Font}  升级 脚本&quot;
+    echo -e &quot;${Green}1.${Font}  安装 V2Ray (Nginx+ws+tls)&quot;
+    echo -e &quot;${Green}2.${Font}  安装 V2Ray (http/2)&quot;
+    echo -e &quot;${Green}3.${Font}  升级 V2Ray core&quot;
+    echo -e &quot;—————————————— 配置变更 ——————————————&quot;
+    echo -e &quot;${Green}4.${Font}  变更 UUID&quot;
+    echo -e &quot;${Green}5.${Font}  变更 alterid&quot;
+    echo -e &quot;${Green}6.${Font}  变更 port&quot;
+    echo -e &quot;${Green}7.${Font}  变更 TLS 版本(仅ws+tls有效)&quot;
+    echo -e &quot;—————————————— 查看信息 ——————————————&quot;
+    echo -e &quot;${Green}8.${Font}  查看 实时访问日志&quot;
+    echo -e &quot;${Green}9.${Font}  查看 实时错误日志&quot;
+    echo -e &quot;${Green}10.${Font} 查看 V2Ray 配置信息&quot;
+    echo -e &quot;—————————————— 其他选项 ——————————————&quot;
+    echo -e &quot;${Green}11.${Font} 安装 4合1 bbr 锐速安装脚本&quot;
+    echo -e &quot;${Green}12.${Font} 安装 MTproxy(支持TLS混淆)&quot;
+    echo -e &quot;${Green}13.${Font} 证书 有效期更新&quot;
+    echo -e &quot;${Green}14.${Font} 卸载 V2Ray&quot;
+    echo -e &quot;${Green}15.${Font} 更新 证书crontab计划任务&quot;
+    echo -e &quot;${Green}16.${Font} 清空 证书遗留文件&quot;
+    echo -e &quot;${Green}17.${Font} 退出 \n&quot;
+read -rp &quot;请输入数字：&quot; menu_num
+    case $menu_num in
+    0)
+        update_sh
+        ;;
+    1)
+        shell_mode=&quot;ws&quot;
+        install_v2ray_ws_tls
+        ;;
+    2)
+        shell_mode=&quot;h2&quot;
+        install_v2_h2
+        ;;
+    3)
+        bash &lt;(curl -L -s https://install.direct/go.sh)
+        ;;
+    4)
+        read -rp &quot;请输入UUID:&quot; UUID
+        modify_UUID
+        start_process_systemd
+        ;;
+    5)
+        read -rp &quot;请输入alterID:&quot; alterID
+        modify_alterid
+        start_process_systemd
+        ;;
+    6)
+        read -rp &quot;请输入连接端口:&quot; port
+        if grep -q &quot;ws&quot; $v2ray_qr_config_file; then
+            modify_nginx_port
+        elif grep -q &quot;h2&quot; $v2ray_qr_config_file; then
+            modify_inbound_port
+        fi
+        start_process_systemd
+        ;;
+    7)
+        tls_type
+        ;;
+    8)
+        show_access_log
+        ;;
+    9)
+        show_error_log
+        ;;
+    10)
+        basic_information
+        vmess_qr_link_image
+        show_information
+        ;;
+    11)
+        bbr_boost_sh
+        ;;
+    12)
+        mtproxy_sh
+        ;;
+    13)
+        stop_process_systemd
+        ssl_update_manuel
+        start_process_systemd
+        ;;
+    14)
+        uninstall_all
+        ;;
+    15)
+        acme_cron_update
+        ;;
+    16)
+        delete_tls_key_and_crt
+        ;;
+    17)
+        exit 0
+        ;;
+    *)
+        echo -e &quot;${RedBG}请输入正确的数字${Font}&quot;
+        ;;
+    esac
+}
+judge_mode
+list &quot;$1&quot;</code></pre>
+
+        
+                <blockquote style="margin: 2em 0 0;padding: 0.5em 1em;border-left: 3px solid #F44336;background-color: #F5F5F5;list-style: none;">
+                    <p><strong>
+                         
+                            本博客所有文章除特別聲明外，均採用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">CC BY-NC-SA 3.0 Unported License</a>授權.
+                        </strong>
+                        <br>
+                        <strong>本文鏈接：</strong><a href="https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/</a>
+                    </p>
+                </blockquote>
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #778899;
+            text-shadow: 0;
+            display: none
+        }
+</style>
+	
+<div class="btn_click_load"> 
+    <button class="disqus_click_btn">閱讀評論 「請確認 disq.us &amp; disquscdn.com &amp; disqus.com 可正常載入」</button>
+</div>
+
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'https://onenice.site/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/ls-javascript" id="disqus-lazy-load-script">
+    $.ajax({
+        url: 'https://disqus.com/next/config.json',
+        timeout: 4000,
+        type: 'GET',
+        success: (function() {
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//onenice-site.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+            $('.disqus_click_btn').css('display','none');
+        })(),
+        error: function() {
+          $('.disqus_click_btn').css('display','block');
+        }
+    });
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//onenice-site.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.disqus_click_btn').css('display','none');
+    });
+</script>
+  	
+
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/" id="post_nav-older" class="next-content">
+            舊篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="柒語's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        vita@tutamail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="mailto: vita@tutamail.com" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                首頁
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    過往
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2020/03/">三月 2020<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/11/">十一月 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">十月 2018<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                分類
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/%E7%84%A1%E9%A1%8C/">無題<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+        
+            <li class="divider"></li>
+        
+    
+
+    <!-- Pages  -->
+    
+        <li>
+            <a href="/links" title="友情鏈接">
+                
+                    <i class="material-icons sidebar-material-icons">link</i>
+                
+                友情鏈接
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/tags" title="標籤雲">
+                
+                    <i class="material-icons sidebar-material-icons">style</i>
+                
+                標籤雲
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/timeline" title="時間軸">
+                
+                    <i class="material-icons sidebar-material-icons">timeline</i>
+                
+                時間軸
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/gallery" title="畫廊">
+                
+                    <i class="material-icons sidebar-material-icons">photo_library</i>
+                
+                畫廊
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/about" title="關於">
+                
+                    <i class="material-icons sidebar-material-icons">flag</i>
+                
+                關於
+            </a>
+        </li>
+        
+            <li class="divider"></li>
+        
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                文章總數
+                <span class="sidebar-badge">3</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <div id="winxin-logo">
+                <center><img src="https://cdn.betamole.com/img/wx.png" style="width:?;height:?"/></center>
+    </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+    <span id="footer-image">
+        <a href="http://www.betamole.com/" target="_blank" title="BetaMole_logo">
+            <img src="/img/betamole.png" alt="BetaMole_logo"><!--
+     --></a>
+    </span>
+
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+        <a href="https://twitter.com/vitafree" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-twitter">
+                <span class="visuallyhidden">Twitter</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Pawoo -->
+    
+        <a href="https://pawoo.net/@vitafree" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-pawoo">
+                <span class="visuallyhidden">Pawoo</span>
+            </button><!--
+     --></a>
+    
+    
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+        <a href="https://vita-free.tumblr.com" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-tumblr">
+                <span class="visuallyhidden">Tumblr</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+        <a href="https://t.me/VitaFree" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-telegram">
+                <span class="visuallyhidden">Telegram</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- V2EX -->
+    
+
+    <!-- Segmentfault -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;<span year></span>&nbsp;OneNiceSite
+            
+                <br>
+                
+                    <a href="https://www.upyun.com" target="_blank" title="upyun"><img src="/img/upyun_logo.svg" alt="upyun"></a>
+                
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","https://cdn.betamole.com/hexo-theme-material/source/js/lazyload.min.js", true)</script>
+
+
+
+    <script>lsloader.load("js_js","https://cdn.betamole.com/hexo-theme-material/source/js/js.min.js", true)</script>
+
+
+
+    <script>lsloader.load("np_js","https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#FFD700'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #FFD700, 0 0 15px #FFD700'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#FFD700',
+        'border-left-color': '#FFD700'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script>lsloader.load("sm_js","https://cdn.betamole.com/hexo-theme-material/source/js/smoothscroll.js", true)</script>
+    
+
+
+
+
+
+
+
+   <!-- 使用 DISQUS js 代码 -->
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+    
+        <script>lsloader.load("hanabi","https://cdn.betamole.com/hexo-theme-material/source/js/hanabi-browser-bundle.js", true)</script>
+    
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+        
+        
+        HanabiBrowser.start('pre code',false);
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    var copyrightNow = new Date().getFullYear();
+    var textContent = document.querySelector('span[year]')
+
+    copyrightSince = 2016;
+    if (copyrightSince === copyrightNow||copyrightSince === 0000) {
+        textContent.textContent = copyrightNow
+    } else {
+        textContent.textContent = copyrightSince + ' - ' + copyrightNow
+    }
+
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.6 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

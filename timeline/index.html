@@ -703,6 +703,89 @@
    	   		
 			<div class="md-timeline-block">
                 		<div class="md-timeline-date blue">
+                   			<div class="md-date">3月 01 2020</div>
+                		</div>
+
+                		<div class="md-timeline-content">
+                    			<div class="md-timeline-title"><a href="/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">V2Ray服务器安装脚本及K2P路由器配置</a></div>
+					<div class="md-timeline-info">
+						<span class="md-timeline-info-span">Categories:
+							<a class="category-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾</a>
+						</span>
+						<span class="md-timeline-info-span">Tags:
+							<a class="tag-link" href="/tags/VPN/" rel="tag">VPN</a>, <a class="tag-link" href="/tags/%E8%B6%8A%E8%BF%87%E9%95%BF%E5%9F%8E%EF%BC%8C%E8%B5%B0%E5%90%91%E4%B8%96%E7%95%8C/" rel="tag">越过长城，走向世界</a>
+						</span>
+						
+					</div>
+					<p class="md-timeline-excerpt">
+						
+							服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &quot;inbound&quot;: {
+    &quot;protocol&quot;: &quot;dokodemo-door&quot;,
+    &quot;port&quot;: 1234,  
+    &quot;settings&quot;: {
+    &quot;network&quot;: &quot;tcp&quot;,
+    &quot;timeout&quot;: 30,
+    &quot;followRedirect&quot;: true
+    }
+  },
+  &quot;outbound&quot;: {
+    &quot;protocol&quot;: &quot;vmess&quot;,
+    &quot;settings&quot;: {
+    &quot;udp&quot;: true,
+      &quot;vnext&quot;: [{
+        &quot;address&quot;: &quot;fuckgfw.tk&quot;, 
+        &quot;port&quot;: 443,  
+     &quot;users&quot;: [
+        {
+          &quot;id&quot;: &quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&quot;,
+          &quot;alterId&quot;: 64,
+          &quot;security&quot;: &quot;auto&quot;,
+          &quot;level&quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &quot;streamSettings&quot;: {
+      &quot;network&quot;: &quot;ws&quot;,
+      &quot;security&quot;: &quot;tls&quot;,
+      &quot;tlsSettings&quot;: {
+        &quot;serverName&quot;: &quot;fuckgfw.tk&quot;,
+        &quot;allowInsecure&quot;: true
+       },
+      &quot;wsSettings&quot;: {
+        &quot;connectionReuse&quot;: true,
+        &quot;path&quot;: &quot;/19890604/&quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份
+						...
+					</p>
+                    		</div>
+			</div>	
+   		
+			<div class="md-timeline-block">
+                		<div class="md-timeline-date blue">
                    			<div class="md-date">11月 17 2019</div>
                 		</div>
 
@@ -844,7 +927,7 @@
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2019/11/">十一月 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">十月 2018<span class="sidebar_archives-count">1</span></a>
+                <a class="sidebar_archives-link" href="/archives/2020/03/">三月 2020<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/11/">十一月 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">十月 2018<span class="sidebar_archives-count">1</span></a>
             </ul>
         </li>
         
@@ -862,7 +945,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                <a class="sidebar_archives-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/%E7%84%A1%E9%A1%8C/">無題<span class="sidebar_archives-count">1</span></a>
+                <a class="sidebar_archives-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/%E7%84%A1%E9%A1%8C/">無題<span class="sidebar_archives-count">1</span></a>
             </ul>
         </li>
         
@@ -930,7 +1013,7 @@
         <li>
             <a href="/archives">
                 文章總數
-                <span class="sidebar-badge">2</span>
+                <span class="sidebar-badge">3</span>
             </a>
         </li>
         

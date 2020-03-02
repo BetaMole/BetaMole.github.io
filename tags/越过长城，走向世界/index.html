@@ -52,7 +52,7 @@
     
     <title>
         
-            標籤: MacOS | 
+            標籤: 越过长城，走向世界 | 
         
         OneNiceSite
     </title>
@@ -219,7 +219,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="OneNiceSite">
-    <meta name="msapplication-starturl" content="https://onenice.site/tags/MacOS/">
+    <meta name="msapplication-starturl" content="https://onenice.site/tags/%E8%B6%8A%E8%BF%87%E9%95%BF%E5%9F%8E%EF%BC%8C%E8%B5%B0%E5%90%91%E4%B8%96%E7%95%8C/">
     <meta name="msapplication-navbutton-color" content="#778899">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="OneNiceSite">
@@ -238,9 +238,9 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="https://onenice.site/tags/MacOS/">
+    <meta property="og:url" content="https://onenice.site/tags/%E8%B6%8A%E8%BF%87%E9%95%BF%E5%9F%8E%EF%BC%8C%E8%B5%B0%E5%90%91%E4%B8%96%E7%95%8C/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="標籤: MacOS | OneNiceSite">
+    <meta property="og:title" content="標籤: 越过长城，走向世界 | OneNiceSite">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="OneNiceSite">
     
@@ -252,7 +252,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="https://onenice.site/tags/MacOS/index.html" />
+        <link rel="canonical" href="https://onenice.site/tags/%E8%B6%8A%E8%BF%87%E9%95%BF%E5%9F%8E%EF%BC%8C%E8%B5%B0%E5%90%91%E4%B8%96%E7%95%8C/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -317,21 +317,80 @@
     <!-- Post Thumbnail -->
     
         <!-- Custom Thumbnail -->
-        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50 lazy" data-original="https://cdn.betamole.com/img/WINDOWS-MACOS.png">
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50 lazy" data-original="https://cdn.betamole.com/img/V2ray.jpg">
     
 
         <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/">将博客从Windows转移至MacOS</a></p>
+        <p class="article-headline-p"><a href="/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">V2Ray服务器安装脚本及K2P路由器配置</a></p>
     </div>
 
     <!-- Post Excerpt -->
     <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
         
-            由于本人刚接触MacOS,系统使用习惯依然是Windows的那一套，还没改过来。安装Git和Node.js时没看Hexo的文档直接从官网下载安装包安...
+            服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &quot;inbound&quot;: {
+    &quot;protocol&quot;: &quot;dokodemo-door&quot;,
+    &quot;port&quot;: 1234,  
+    &quot;settings&quot;: {
+    &quot;network&quot;: &quot;tcp&quot;,
+    &quot;timeout&quot;: 30,
+    &quot;followRedirect&quot;: true
+    }
+  },
+  &quot;outbound&quot;: {
+    &quot;protocol&quot;: &quot;vmess&quot;,
+    &quot;settings&quot;: {
+    &quot;udp&quot;: true,
+      &quot;vnext&quot;: [{
+        &quot;address&quot;: &quot;fuckgfw.tk&quot;, 
+        &quot;port&quot;: 443,  
+     &quot;users&quot;: [
+        {
+          &quot;id&quot;: &quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&quot;,
+          &quot;alterId&quot;: 64,
+          &quot;security&quot;: &quot;auto&quot;,
+          &quot;level&quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &quot;streamSettings&quot;: {
+      &quot;network&quot;: &quot;ws&quot;,
+      &quot;security&quot;: &quot;tls&quot;,
+      &quot;tlsSettings&quot;: {
+        &quot;serverName&quot;: &quot;fuckgfw.tk&quot;,
+        &quot;allowInsecure&quot;: true
+       },
+      &quot;wsSettings&quot;: {
+        &quot;connectionReuse&quot;: true,
+        &quot;path&quot;: &quot;/19890604/&quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份
         
         &nbsp;&nbsp;&nbsp;
         <span>
-            <a href="/2019/11/17/%E5%B0%86%E5%8D%9A%E5%AE%A2%E4%BB%8EWindows%E8%BD%AC%E7%A7%BB%E8%87%B3MacOS/" target="_self">繼續閱讀</a>
+            <a href="/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">繼續閱讀</a>
         </span>
     </div>
     <!-- Post_entry Info-->
@@ -343,7 +402,7 @@
             </div>
             <div>
                 <strong>柒語</strong>
-                <span>11月 17, 2019</span>
+                <span>3月 01, 2020</span>
             </div>
         </div>
         <div id="post_entry-right-info">

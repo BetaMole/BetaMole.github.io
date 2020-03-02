@@ -317,6 +317,124 @@
     <!-- Post Thumbnail -->
     
         <!-- Custom Thumbnail -->
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50 lazy" data-original="https://cdn.betamole.com/img/V2ray.jpg">
+    
+
+        <!-- Post Title -->
+        <p class="article-headline-p"><a href="/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/">V2Ray服务器安装脚本及K2P路由器配置</a></p>
+    </div>
+
+    <!-- Post Excerpt -->
+    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
+        
+            服务器端配置我的VPS使用CentOS8系统，可直接开启BBR：
+echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+sysctl -p
+使用Vmess+websocket+TLS+Nginx+Website的一键安装脚本（适用于：Debian 9+ / Ubuntu 18.04+ / Centos7+）
+bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install_h2.sh) | tee v2ray_ins_h2.log
+脚本管理命令
+启动 V2ray：systemctl start v2ray
+停止 V2ray：systemctl stop v2ray
+启动 Nginx：systemctl start nginx
+停止 Nginx：systemctl stop nginx
+脚本相关目录
+Web 目录：/home/wwwroot/levis
+V2ray 服务端配置：/etc/v2ray/config.json
+V2ray 客户端配置：执行安装时所在目录下的 v2ray_info.txt
+Nginx 目录：/etc/nginx
+证书目录：/data/v2ray.key 和 /data/v2ray.crt
+路由器配置参考链接：http://iytc.net/wordpress/?p=4243
+{
+  &quot;inbound&quot;: {
+    &quot;protocol&quot;: &quot;dokodemo-door&quot;,
+    &quot;port&quot;: 1234,  
+    &quot;settings&quot;: {
+    &quot;network&quot;: &quot;tcp&quot;,
+    &quot;timeout&quot;: 30,
+    &quot;followRedirect&quot;: true
+    }
+  },
+  &quot;outbound&quot;: {
+    &quot;protocol&quot;: &quot;vmess&quot;,
+    &quot;settings&quot;: {
+    &quot;udp&quot;: true,
+      &quot;vnext&quot;: [{
+        &quot;address&quot;: &quot;fuckgfw.tk&quot;, 
+        &quot;port&quot;: 443,  
+     &quot;users&quot;: [
+        {
+          &quot;id&quot;: &quot;1c1d2c2a-c4b7-47ed-b339-27af5a676dba&quot;,
+          &quot;alterId&quot;: 64,
+          &quot;security&quot;: &quot;auto&quot;,
+          &quot;level&quot;: 0
+        }
+          ]
+      }]
+    }, 
+   &quot;streamSettings&quot;: {
+      &quot;network&quot;: &quot;ws&quot;,
+      &quot;security&quot;: &quot;tls&quot;,
+      &quot;tlsSettings&quot;: {
+        &quot;serverName&quot;: &quot;fuckgfw.tk&quot;,
+        &quot;allowInsecure&quot;: true
+       },
+      &quot;wsSettings&quot;: {
+        &quot;connectionReuse&quot;: true,
+        &quot;path&quot;: &quot;/19890604/&quot;
+      }
+    }
+}
+}
+下面为一键安装脚本备份
+        
+        &nbsp;&nbsp;&nbsp;
+        <span>
+            <a href="/2020/03/01/V2Ray%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E5%8F%8AK2P%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">繼續閱讀</a>
+        </span>
+    </div>
+    <!-- Post_entry Info-->
+    <div id="post_entry-info">
+        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
+            <!-- Author Avatar -->
+            <div id="author-avatar">
+                <img src="/img/avatar.png" width="44px" height="44px" alt="柒語's avatar">
+            </div>
+            <div>
+                <strong>柒語</strong>
+                <span>3月 01, 2020</span>
+            </div>
+        </div>
+        <div id="post_entry-right-info">
+          
+              <!-- Category -->
+              <span class="post_entry-category">
+                  <a class="post_category-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾</a>
+              </span>
+            
+
+            
+
+            
+
+            <!-- Post Views -->
+            <span class="post_entry-views">
+            </span>
+        </div>
+    </div>
+</div>
+
+            
+            
+        
+    
+        
+            
+                <!-- Paradox Thumbnail -->
+                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
+    <!-- Post Thumbnail -->
+    
+        <!-- Custom Thumbnail -->
         <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50 lazy" data-original="https://cdn.betamole.com/img/WINDOWS-MACOS.png">
     
 
@@ -469,7 +587,7 @@
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2019/11/">十一月 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">十月 2018<span class="sidebar_archives-count">1</span></a>
+                <a class="sidebar_archives-link" href="/archives/2020/03/">三月 2020<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/11/">十一月 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">十月 2018<span class="sidebar_archives-count">1</span></a>
             </ul>
         </li>
         
@@ -487,7 +605,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                <a class="sidebar_archives-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/%E7%84%A1%E9%A1%8C/">無題<span class="sidebar_archives-count">1</span></a>
+                <a class="sidebar_archives-link" href="/categories/%E6%8A%98%E8%85%BE/">折腾<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/%E7%84%A1%E9%A1%8C/">無題<span class="sidebar_archives-count">1</span></a>
             </ul>
         </li>
         
@@ -555,7 +673,7 @@
         <li>
             <a href="/archives">
                 文章總數
-                <span class="sidebar-badge">2</span>
+                <span class="sidebar-badge">3</span>
             </a>
         </li>
         
